@@ -1,0 +1,44 @@
+{
+  "font": {
+    "family": {
+      "display": { "value": "'DM Serif Display', Georgia, serif" },
+      "body":    { "value": "'DM Sans', system-ui, sans-serif" },
+      "mono":    { "value": "'DM Mono', 'Fira Code', monospace" }
+    },
+    "size": {
+      "2xs": { "value": "11px" },
+      "xs":  { "value": "12px" },
+      "sm":  { "value": "13px" },
+      "md":  { "value": "14px" },
+      "base":{ "value": "16px" },
+      "lg":  { "value": "18px" },
+      "xl":  { "value": "20px" },
+      "2xl": { "value": "24px" },
+      "3xl": { "value": "30px" },
+      "4xl": { "value": "36px" },
+      "5xl": { "value": "48px" },
+      "6xl": { "value": "60px" },
+      "7xl": { "value": "72px" }
+    },
+    "weight": {
+      "light":   { "value": "300" },
+      "regular": { "value": "400" },
+      "medium":  { "value": "500" },
+      "semibold":{ "value": "600" }
+    },
+    "line-height": {
+      "tight":   { "value": "1.1" },
+      "snug":    { "value": "1.25" },
+      "normal":  { "value": "1.5" },
+      "relaxed": { "value": "1.7" },
+      "loose":   { "value": "2" }
+    },
+    "letter-spacing": {
+      "tight":  { "value": "-0.02em" },
+      "normal": { "value": "0" },
+      "wide":   { "value": "0.04em" },
+      "wider":  { "value": "0.08em" },
+      "widest": { "value": "0.16em" }
+    }
+  }
+}

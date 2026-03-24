@@ -1,0 +1,31 @@
+name: Build Tokens
+
+on:
+  push:
+    branches: [main]
+    paths: ['tokens/**']
+  pull_request:
+    paths: ['tokens/**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run validate
+      - run: npm run build
+      - name: Confirm dist outputs exist
+        run: |
+          test -f dist/css/tokens.css || exit 1
+          test -f dist/js/tokens.mjs || exit 1
+          test -f dist/json/tokens.json || exit 1
+      - name: Upload dist as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-tokens
+          path: dist/

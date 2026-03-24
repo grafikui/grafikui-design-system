@@ -1,0 +1,32 @@
+{
+  "color": {
+    "base": {
+      "black": { "value": "#0A0A0A" },
+      "white": { "value": "#FFFFFF" },
+      "gray": {
+        "50":  { "value": "#F7F7F5" },
+        "100": { "value": "#EDEDEA" },
+        "200": { "value": "#D4D4CF" },
+        "300": { "value": "#ABABAB" },
+        "400": { "value": "#888880" },
+        "500": { "value": "#5C5C58" },
+        "600": { "value": "#3D3D3A" },
+        "700": { "value": "#2A2A28" },
+        "800": { "value": "#1A1A18" },
+        "900": { "value": "#0F0F0E" }
+      },
+      "coral": {
+        "50":  { "value": "#FDF0EC" },
+        "100": { "value": "#F9D5C8" },
+        "200": { "value": "#F4A98E" },
+        "300": { "value": "#ED7A56" },
+        "400": { "value": "#D85A30" },
+        "500": { "value": "#C04828" },
+        "600": { "value": "#993A20" },
+        "700": { "value": "#722B17" },
+        "800": { "value": "#4A1C0F" },
+        "900": { "value": "#260E07" }
+      }
+    }
+  }
+}

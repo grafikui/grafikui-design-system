@@ -1,0 +1,30 @@
+{
+  "name": "@grafikui/design-system",
+  "version": "0.1.0",
+  "description": "Token-first design system for Grafikui. Open source, MIT licensed.",
+  "type": "module",
+  "main": "dist/js/tokens.mjs",
+  "exports": {
+    ".": "./dist/js/tokens.mjs",
+    "./css": "./dist/css/tokens.css",
+    "./json": "./dist/json/tokens.json"
+  },
+  "scripts": {
+    "build": "node config/style-dictionary.config.js",
+    "build:watch": "nodemon --watch tokens --ext json --exec \"npm run build\"",
+    "validate": "node scripts/validate-tokens.js",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "style-dictionary",
+    "grafikui"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.0.0",
+    "rimraf": "^5.0.0",
+    "style-dictionary": "^4.0.0"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "color": {
+    "brand": {
+      "default":  { "value": "{color.base.coral.500}" },
+      "hover":    { "value": "{color.base.coral.600}" },
+      "subtle":   { "value": "{color.base.coral.100}" },
+      "on-brand": { "value": "{color.base.white}" }
+    },
+    "surface": {
+      "base":    { "value": "{color.base.gray.900}" },
+      "raised":  { "value": "{color.base.gray.800}" },
+      "overlay": { "value": "{color.base.gray.700}" }
+    },
+    "text": {
+      "primary":   { "value": "{color.base.white}" },
+      "secondary": { "value": "{color.base.gray.300}" },
+      "tertiary":  { "value": "{color.base.gray.500}" },
+      "disabled":  { "value": "{color.base.gray.600}" },
+      "inverse":   { "value": "{color.base.gray.900}" }
+    },
+    "border": {
+      "default": { "value": "{color.base.gray.700}" },
+      "subtle":  { "value": "{color.base.gray.800}" },
+      "strong":  { "value": "{color.base.gray.600}" }
+    },
+    "status": {
+      "success": { "value": "#1D9E75" },
+      "warning": { "value": "#EF9F27" },
+      "error":   { "value": "#E24B4A" },
+      "info":    { "value": "#378ADD" }
+    }
+  }
+}
