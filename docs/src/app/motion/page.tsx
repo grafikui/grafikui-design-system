@@ -13,9 +13,9 @@ const EASING_MAP: Record<string, string | number[]> = {
   snappy: [0.2, 0, 0, 1],
 };
 
-const BALL_SIZE_ROW = 16; // w-4
+const BALL_SIZE_ROW = 16;  // w-4
 const BALL_SIZE_CARD = 20; // w-5
-const PADDING = 8; // px from each edge
+const PADDING = 8;
 
 function useMeasuredTrack() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -36,6 +36,7 @@ function useMeasuredTrack() {
 }
 
 function DurationRow({ name, value }: { name: string; value: string }) {
+  // value is already the resolved string e.g. "100ms" — parse directly
   const ms = parseInt(value, 10) || 0;
   const controls = useAnimation();
   const isAnimating = useRef(false);
@@ -46,7 +47,6 @@ function DurationRow({ name, value }: { name: string; value: string }) {
   async function handleHover() {
     if (isAnimating.current) return;
     isAnimating.current = true;
-    // For instant (0ms) use a very short duration so it visibly snaps
     const dur = ms === 0 ? 0.001 : ms / 1000;
     await controls.start({
       x: target,
@@ -70,7 +70,7 @@ function DurationRow({ name, value }: { name: string; value: string }) {
       <span className="md:w-20 font-mono text-[11px] text-white/70 bg-white/[0.06] border border-white/10 px-3 py-1.5 rounded-lg shrink-0 text-center">
         {value}
       </span>
-      {/* Track — no overflow-hidden so ball is never clipped */}
+      {/* No overflow-hidden — ball must never clip */}
       <div ref={trackRef} className="flex-1 relative h-10 bg-white/[0.04] rounded-xl border border-white/5">
         <motion.div
           animate={controls}
@@ -117,7 +117,7 @@ function EasingCard({ name, value }: { name: string; value: string }) {
       onClick={handleClick}
       className="flex flex-col gap-5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/25 p-6 md:p-8 rounded-2xl cursor-pointer group select-none"
     >
-      {/* Track — no overflow-hidden so spring can overshoot visibly */}
+      {/* No overflow-hidden — spring must be able to overshoot */}
       <div ref={trackRef} className="relative h-10 bg-white/[0.04] rounded-xl border border-white/5">
         <motion.div
           animate={controls}
@@ -141,6 +141,7 @@ function EasingCard({ name, value }: { name: string; value: string }) {
         <span className="font-mono text-[11px] text-white/80 group-hover:text-white transition-colors">
           motion.easing.<span className="text-[var(--gfk-color-brand-default)]">{name}</span>
         </span>
+        {/* value is already the resolved string */}
         <span className="font-mono text-[10px] text-white/30 break-all leading-relaxed">{value}</span>
       </div>
     </motion.div>
@@ -170,26 +171,26 @@ export default function MotionPage() {
 
       <motion.div variants={item} className="w-full h-px bg-gradient-to-r from-white/10 via-white/5 to-transparent" />
 
-      {/* Duration */}
+      {/* Duration — obj is a plain string in the flattened JSON, not { value: string } */}
       <motion.div variants={item} className="flex flex-col gap-10">
         <h2 className="text-[10px] font-mono text-[var(--gfk-color-brand-default)] uppercase tracking-[0.25em] pl-1 border-l-2 border-[var(--gfk-color-brand-default)]">
           Duration Scale
         </h2>
         <div className="flex flex-col gap-3">
-          {Object.entries(motionTokens.duration).map(([key, obj]: any) => (
-            <DurationRow key={key} name={key} value={obj.value} />
+          {Object.entries(motionTokens.duration).map(([key, val]: any) => (
+            <DurationRow key={key} name={key} value={val} />
           ))}
         </div>
       </motion.div>
 
-      {/* Easing */}
+      {/* Easing — same: val is the resolved string directly */}
       <motion.div variants={item} className="flex flex-col gap-10">
         <h2 className="text-[10px] font-mono text-white/60 uppercase tracking-[0.25em] pl-1 border-l-2 border-white/20">
           Easing Curves
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {Object.entries(motionTokens.easing).map(([key, obj]: any) => (
-            <EasingCard key={key} name={key} value={obj.value} />
+          {Object.entries(motionTokens.easing).map(([key, val]: any) => (
+            <EasingCard key={key} name={key} value={val} />
           ))}
         </div>
       </motion.div>
