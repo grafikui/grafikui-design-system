@@ -2,9 +2,8 @@
 
 import tokens from "../../system-dist/json/tokens.json";
 import { motion, useAnimation, AnimatePresence } from "framer-motion";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
-// Map token key to its actual cubic-bezier array for live preview
 const EASING_MAP: Record<string, string | number[]> = {
   linear: "linear",
   "ease-in": [0.4, 0, 1, 1],
@@ -14,25 +13,50 @@ const EASING_MAP: Record<string, string | number[]> = {
   snappy: [0.2, 0, 0, 1],
 };
 
+const BALL_SIZE_ROW = 16; // w-4
+const BALL_SIZE_CARD = 20; // w-5
+const PADDING = 8; // px from each edge
+
+function useMeasuredTrack() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [trackWidth, setTrackWidth] = useState(0);
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    setTrackWidth(el.offsetWidth);
+    const ro = new ResizeObserver((entries) => {
+      setTrackWidth(entries[0].contentRect.width);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  return { trackRef, trackWidth };
+}
+
 function DurationRow({ name, value }: { name: string; value: string }) {
   const ms = parseInt(value, 10) || 0;
   const controls = useAnimation();
-  const [active, setActive] = useState(false);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const isAnimating = useRef(false);
+  const { trackRef, trackWidth } = useMeasuredTrack();
+  const target = trackWidth > 0 ? trackWidth - BALL_SIZE_ROW - PADDING * 2 : 0;
+  const startX = PADDING;
 
   async function handleHover() {
-    if (active) return;
-    setActive(true);
-    const trackWidth = trackRef.current?.offsetWidth ?? 200;
-    const ballSize = 16;
-    const padding = 12; // left-3 = 12px
-    const target = trackWidth - ballSize - padding * 2;
+    if (isAnimating.current) return;
+    isAnimating.current = true;
+    // For instant (0ms) use a very short duration so it visibly snaps
+    const dur = ms === 0 ? 0.001 : ms / 1000;
     await controls.start({
       x: target,
-      transition: { duration: Math.max(ms / 1000, 0.05), ease: "easeInOut" },
+      transition: { duration: dur, ease: "linear" },
     });
-    await controls.start({ x: 0, transition: { duration: 0.15, ease: "easeIn" } });
-    setActive(false);
+    await controls.start({
+      x: startX,
+      transition: { duration: 0.2, ease: "easeIn" },
+    });
+    isAnimating.current = false;
   }
 
   return (
@@ -46,13 +70,14 @@ function DurationRow({ name, value }: { name: string; value: string }) {
       <span className="md:w-20 font-mono text-[11px] text-white/70 bg-white/[0.06] border border-white/10 px-3 py-1.5 rounded-lg shrink-0 text-center">
         {value}
       </span>
-      <div ref={trackRef} className="flex-1 relative h-10 bg-white/[0.04] rounded-xl border border-white/5 overflow-hidden">
+      {/* Track — no overflow-hidden so ball is never clipped */}
+      <div ref={trackRef} className="flex-1 relative h-10 bg-white/[0.04] rounded-xl border border-white/5">
         <motion.div
           animate={controls}
-          initial={{ x: 0 }}
-          className="absolute top-1/2 left-3 -translate-y-1/2 w-4 h-4 rounded-full bg-[var(--gfk-color-brand-default)] shadow-[0_0_10px_var(--gfk-color-brand-default)]"
+          style={{ x: startX }}
+          className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[var(--gfk-color-brand-default)] shadow-[0_0_10px_var(--gfk-color-brand-default)]"
         />
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[9px] text-white/20 uppercase tracking-widest pointer-events-none group-hover:text-white/40 transition-colors">
+        <span className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[9px] text-white/25 uppercase tracking-widest pointer-events-none group-hover:text-white/50 transition-colors">
           hover
         </span>
       </div>
@@ -60,44 +85,54 @@ function DurationRow({ name, value }: { name: string; value: string }) {
   );
 }
 
-
-
 function EasingCard({ name, value }: { name: string; value: string }) {
-  const [playing, setPlaying] = useState(false);
   const controls = useAnimation();
+  const isAnimating = useRef(false);
+  const [played, setPlayed] = useState(false);
+  const { trackRef, trackWidth } = useMeasuredTrack();
+  const target = trackWidth > 0 ? trackWidth - BALL_SIZE_CARD - PADDING * 2 : 0;
+  const startX = PADDING;
   const ease = EASING_MAP[name] ?? "easeInOut";
 
-  async function trigger() {
-    if (playing) return;
-    setPlaying(true);
-    await controls.start({ x: "calc(100% - 24px)", transition: { duration: 0.8, ease: ease as any } });
-    await controls.start({ x: 0, transition: { duration: 0.4, ease: "easeIn" } });
-    setPlaying(false);
+  async function handleClick() {
+    if (isAnimating.current) return;
+    isAnimating.current = true;
+    setPlayed(true);
+    await controls.start({
+      x: target,
+      transition: { duration: 0.8, ease: ease as any },
+    });
+    await controls.start({
+      x: startX,
+      transition: { duration: 0.4, ease: "easeIn" },
+    });
+    setPlayed(false);
+    isAnimating.current = false;
   }
 
   return (
     <motion.div
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 400, damping: 30 }}
-      onClick={trigger}
+      onClick={handleClick}
       className="flex flex-col gap-5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/25 p-6 md:p-8 rounded-2xl cursor-pointer group select-none"
     >
-      {/* Track */}
-      <div className="relative h-10 bg-white/[0.04] rounded-xl border border-white/5 overflow-hidden">
+      {/* Track — no overflow-hidden so spring can overshoot visibly */}
+      <div ref={trackRef} className="relative h-10 bg-white/[0.04] rounded-xl border border-white/5">
         <motion.div
           animate={controls}
-          initial={{ x: 0 }}
-          className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 rounded-full bg-[var(--gfk-color-brand-default)] shadow-[0_0_12px_var(--gfk-color-brand-default)]"
+          style={{ x: startX }}
+          className="absolute top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[var(--gfk-color-brand-default)] shadow-[0_0_12px_var(--gfk-color-brand-default)]"
         />
         <AnimatePresence>
-          {!playing && (
+          {!played && (
             <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[9px] text-white/30 uppercase tracking-widest"
+              className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[9px] text-white/25 uppercase tracking-widest pointer-events-none"
             >
-              click to play
+              click
             </motion.span>
           )}
         </AnimatePresence>
@@ -129,7 +164,7 @@ export default function MotionPage() {
       <motion.div variants={item} className="flex flex-col gap-8">
         <h1 className="text-6xl md:text-7xl lg:text-8xl font-serif text-white tracking-tight">Motion</h1>
         <p className="text-white/60 max-w-2xl text-lg md:text-xl font-light leading-relaxed">
-          Duration scales and easing curves. Hover a duration row to see it animate. Click an easing card to play the curve.
+          Duration scales and easing curves. Hover a duration row to feel how long each token takes. Click an easing card to see the curve shape.
         </p>
       </motion.div>
 
