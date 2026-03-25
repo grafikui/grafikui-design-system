@@ -2,7 +2,7 @@
 
 Token-first visual architecture infrastructure for Grafikui projects.
 
-[![Build Tokens](https://github.com/omrdev1/design-system/actions/workflows/build.yml/badge.svg)](https://github.com/omrdev1/design-system/actions/workflows/build.yml)
+[![Build Tokens](https://github.com/Grafikui/grafikui-design-system/actions/workflows/build.yml/badge.svg)](https://github.com/Grafikui/grafikui-design-system/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@grafikui/design-system.svg)](https://www.npmjs.com/package/@grafikui/design-system)
 
 ## What this is

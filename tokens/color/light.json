@@ -1,0 +1,30 @@
+{
+  "color": {
+    "light": {
+      "brand": {
+        "default": { "value": "{color.base.coral.500}" },
+        "hover": { "value": "{color.base.coral.600}" }
+      },
+      "surface": {
+        "base": { "value": "{color.base.gray.50}" },
+        "raised": { "value": "{color.base.white}" },
+        "overlay": { "value": "rgba(255, 255, 255, 0.8)" }
+      },
+      "text": {
+        "primary": { "value": "{color.base.gray.900}" },
+        "secondary": { "value": "{color.base.gray.600}" },
+        "tertiary": { "value": "{color.base.gray.400}" }
+      },
+      "border": {
+        "default": { "value": "{color.base.gray.200}" },
+        "subtle": { "value": "{color.base.gray.100}" }
+      },
+      "status": {
+        "error": { "value": "#E02424" },
+        "success": { "value": "#0E9F6E" },
+        "warning": { "value": "#D08112" },
+        "info": { "value": "#3F83F8" }
+      }
+    }
+  }
+}
