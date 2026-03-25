@@ -58,7 +58,7 @@ export default function RootLayout({
             </Link>
           </nav>
 
-          <a href="https://github.com/omrdev1/grafikui_design_system" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-widest text-white/30 hover:text-white transition-colors w-fit group">
+          <a href="https://github.com/Grafikui/grafikui-design-system" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-widest text-white/30 hover:text-white transition-colors w-fit group">
             <span className="border-b border-transparent group-hover:border-white/20 pb-0.5">Repository</span>
             <ArrowUpRight className="w-3 h-3 group-hover:text-[var(--gfk-color-brand-default)] transition-colors" />
           </a>
