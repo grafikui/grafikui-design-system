@@ -16,46 +16,48 @@ const EASING_MAP: Record<string, string | number[]> = {
 
 function DurationRow({ name, value }: { name: string; value: string }) {
   const ms = parseInt(value, 10) || 0;
-  const maxMs = 1000;
-  const widthPct = Math.min((ms / maxMs) * 100, 4) + "%";
   const controls = useAnimation();
+  const [active, setActive] = useState(false);
 
   async function handleHover() {
+    if (active) return;
+    setActive(true);
+    // Move ball right over exactly 'ms' milliseconds
     await controls.start({
-      width: `${Math.min((ms / maxMs) * 100, 100)}%`,
-      transition: { duration: ms / 1000, ease: "easeOut" },
+      x: "calc(100% - 20px)",
+      transition: { duration: ms / 1000, ease: "easeInOut" },
     });
-  }
-
-  function handleLeave() {
-    controls.start({ width: "0%", transition: { duration: 0.3, ease: "easeIn" } });
+    // Snap back instantly
+    await controls.start({ x: 0, transition: { duration: 0.15, ease: "easeIn" } });
+    setActive(false);
   }
 
   return (
     <motion.div
       onHoverStart={handleHover}
-      onHoverEnd={handleLeave}
-      className="flex flex-col md:flex-row md:items-center gap-5 md:gap-8 bg-white/[0.04] hover:bg-white/[0.07] border border-white/10 hover:border-white/20 p-6 md:p-8 rounded-2xl cursor-default transition-colors"
+      className="flex flex-col md:flex-row md:items-center gap-5 md:gap-8 bg-white/[0.04] hover:bg-white/[0.07] border border-white/10 hover:border-white/25 p-6 md:p-8 rounded-2xl cursor-default transition-colors group"
     >
       <code className="md:w-48 font-mono text-xs text-[var(--gfk-color-brand-default)] shrink-0">
         motion.duration.{name}
       </code>
-      <span className="md:w-20 font-mono text-[11px] text-white/60 bg-white/[0.06] border border-white/10 px-2.5 py-1.5 rounded-lg shrink-0 text-center">
+      <span className="md:w-20 font-mono text-[11px] text-white/70 bg-white/[0.06] border border-white/10 px-3 py-1.5 rounded-lg shrink-0 text-center">
         {value}
       </span>
-      <div className="flex-1 flex items-center gap-4">
-        <div className="flex-1 h-2 bg-white/[0.06] rounded-full overflow-hidden border border-white/5">
-          <motion.div
-            animate={controls}
-            initial={{ width: "0%" }}
-            className="h-full bg-gradient-to-r from-[var(--gfk-color-brand-default)] via-orange-400 to-white/60 rounded-full"
-          />
-        </div>
-        <span className="font-mono text-[10px] text-white/30 shrink-0 w-12 text-right">{ms}ms</span>
+      {/* Fixed-width track — ball takes exactly `ms` to traverse it */}
+      <div className="flex-1 relative h-10 bg-white/[0.04] rounded-xl border border-white/5 overflow-hidden">
+        <motion.div
+          animate={controls}
+          initial={{ x: 0 }}
+          className="absolute top-1/2 left-3 -translate-y-1/2 w-4 h-4 rounded-full bg-[var(--gfk-color-brand-default)] shadow-[0_0_10px_var(--gfk-color-brand-default)]"
+        />
+        <span className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[9px] text-white/20 uppercase tracking-widest pointer-events-none group-hover:text-white/40 transition-colors">
+          hover
+        </span>
       </div>
     </motion.div>
   );
 }
+
 
 function EasingCard({ name, value }: { name: string; value: string }) {
   const [playing, setPlaying] = useState(false);
