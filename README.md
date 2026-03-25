@@ -3,61 +3,73 @@
 Token-first visual architecture infrastructure for Grafikui projects.
 
 [![Build Tokens](https://github.com/Grafikui/grafikui-design-system/actions/workflows/build.yml/badge.svg)](https://github.com/Grafikui/grafikui-design-system/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@grafikui/design-system.svg)](https://www.npmjs.com/package/@grafikui/design-system)
+
+**Documentation:** [system.grafikui.com](https://system.grafikui.com)
 
 ## What this is
 
-This is an MIT-licensed, token-first design system establishing the core structural methodology and identity layer of the Grafikui visual framework. It provides open contribution access, decoupling styling decisions into a single centralized source of truth accessible across various technologies.
+An MIT-licensed, token-first design system establishing the core structural methodology and identity layer of the Grafikui visual framework. Decouples styling decisions into a single centralized source of truth — distributable as CSS custom properties, ESM, or JSON.
 
 ## Quick start
 
-### Installation
+Clone the repo and build the token outputs locally:
+
 ```bash
-npm install @grafikui/design-system
+git clone https://github.com/Grafikui/grafikui-design-system.git
+cd grafikui-design-system
+npm install
+npm run build
 ```
 
-### Consumption (CSS)
-Import the scoped custom properties directly into your stylesheet pipeline:
+This produces three outputs in `dist/`:
+
+| Output | Path | Use |
+| ------ | ---- | --- |
+| CSS custom properties | `dist/css/tokens.css` | Import into any stylesheet |
+| ESM exports | `dist/js/tokens.mjs` | Import in JS/TS projects |
+| JSON | `dist/json/tokens.json` | Consume in any toolchain |
+
+### Using the CSS tokens
+
 ```css
-@import '@grafikui/design-system/css';
+@import './dist/css/tokens.css';
 
 .button {
   background-color: var(--gfk-color-brand-default);
   border-radius: var(--gfk-radius-sm);
+  transition-duration: var(--gfk-motion-duration-normal);
 }
 ```
 
-### Consumption (JavaScript/TypeScript)
-Import the ESM tokens natively:
-```javascript
-import { colorBrandDefault, spacing4 } from '@grafikui/design-system';
+### Using the JS tokens
 
-const MyComponent = styled.div`
-  background: ${colorBrandDefault};
-  padding: ${spacing4};
-`;
+```javascript
+import { colorBrandDefault, radiusSm } from './dist/js/tokens.mjs';
 ```
+
+> **npm package** — `@grafikui/design-system` will be published to npm. Until then, consume directly from the built `dist/` outputs above.
 
 ## Token categories
 
 | Category | Description | File |
 | -------- | ----------- | ---- |
-| Color | Base primitives and context semantics | `tokens/color/*.json` |
-| Typography | Families, weights, sizes, spacing | `tokens/typography/base.json` |
+| Color | Base primitives and semantic aliases | `tokens/color/*.json` |
+| Typography | Families, weights, sizes, line-height, letter-spacing | `tokens/typography/base.json` |
 | Spacing | Strict 4px incremental scale | `tokens/spacing/base.json` |
-| Radius | Border radii steps | `tokens/radius/base.json` |
-| Motion | Timings and easing curves | `tokens/motion/base.json` |
+| Radius | Border radius scale | `tokens/radius/base.json` |
+| Motion | Duration scale and easing curves | `tokens/motion/base.json` |
 
 ## Using tokens
-All CSS variables generated apply the prefixed `--gfk-` taxonomy to avoid global collisions. See the `dist` generated files for exact alias maps.
+
+All CSS variables use the `--gfk-` prefix to avoid global collisions. See `dist/css/tokens.css` for the full output, or browse the live docs at [system.grafikui.com](https://system.grafikui.com).
 
 ## Contributing
 
-Review [CONTRIBUTING.md](./CONTRIBUTING.md) to understand exact governance workflows and addition protocols.
+Review [CONTRIBUTING.md](./CONTRIBUTING.md) for token naming conventions, the addition workflow, and PR requirements.
 
 ## Methodology
 
-Review [METHODOLOGY.md](./METHODOLOGY.md) for the strategic reasoning dictating internal architectures, naming, and mathematical configurations here.
+Review [METHODOLOGY.md](./METHODOLOGY.md) for the reasoning behind the token architecture, naming system, and spatial grid.
 
 ## License
 
