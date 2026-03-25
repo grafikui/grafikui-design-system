@@ -87,6 +87,45 @@ export default function ColorsPage() {
           ))}
         </div>
       </motion.div>
+      {/* Light Mode Tokens */}
+      {semanticColors.light && (
+        <motion.div variants={item} className="flex flex-col gap-12 lg:gap-16">
+          <div className="flex flex-col gap-3">
+            <h2 className="text-[10px] font-mono text-white/40 uppercase tracking-[0.25em] pl-1 border-l border-white/10">Light Mode</h2>
+            <p className="text-white/30 text-sm max-w-xl">Semantic aliases for light contexts. These map to the same base primitives as the dark tokens — only the meaning changes, not the scale.</p>
+          </div>
+          <div className="rounded-3xl border border-white/10 overflow-hidden">
+            {/* Simulated light context */}
+            <div className="bg-[var(--gfk-color-light-surface-base,#F7F7F5)] p-8 md:p-12 flex flex-col gap-6">
+              <span className="font-mono text-[10px] text-black/30 uppercase tracking-[0.2em]">Light context preview</span>
+              <div className="flex flex-wrap gap-4">
+                {Object.entries(semanticColors.light).map(([namespace, variants]: any) =>
+                  Object.entries(variants).map(([key, obj]: any) => (
+                    <motion.div
+                      whileHover={{ y: -3, scale: 1.03 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                      key={`${namespace}-${key}`}
+                      className="flex items-center gap-3 bg-white/60 backdrop-blur-sm border border-black/5 hover:border-black/10 px-4 py-3 rounded-xl group cursor-crosshair shadow-sm"
+                    >
+                      <div
+                        className="w-6 h-6 rounded-full border border-black/10 shrink-0 shadow-inner"
+                        style={{ backgroundColor: `var(--gfk-color-light-${namespace}-${key})` }}
+                      />
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-mono text-[10px] text-black/70 group-hover:text-black transition-colors">color.light.{namespace}.{key}</span>
+                        <span className="font-mono text-[9px] text-black/30">{obj.value}</span>
+                      </div>
+                    </motion.div>
+                  ))
+                )}
+              </div>
+            </div>
+            <div className="bg-black/60 backdrop-blur-sm px-8 py-5 border-t border-white/5">
+              <span className="font-mono text-[10px] text-white/30">CSS: <span className="text-[var(--gfk-color-brand-default)]">--gfk-color-light-*</span> — apply on a <span className="text-white/50">.light</span> or <span className="text-white/50">[data-theme="light"]</span> selector</span>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
     </motion.div>
   );

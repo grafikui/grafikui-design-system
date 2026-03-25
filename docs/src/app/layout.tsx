@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Link from 'next/link';
-import { Hexagon, Type, Grid3X3, ArrowUpRight } from 'lucide-react';
+import { Hexagon, Type, Grid3X3, ArrowUpRight, CircleDashed, Zap } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: "Grafikui Design System Engine",
@@ -47,6 +47,14 @@ export default function RootLayout({
             <Link href="/spacing" className="px-5 py-4 flex items-center gap-4 text-white/40 hover:text-white hover:bg-white-[0.03] rounded-xl transition-all border border-transparent hover:border-white/10 group shadow-sm hover:shadow-xl hover:shadow-[var(--gfk-color-brand-default)]/5 bg-gradient-to-r hover:from-white/[0.03] hover:to-transparent">
               <Grid3X3 className="w-4 h-4 group-hover:text-[var(--gfk-color-brand-default)] transition-colors" />
               <span className="text-[11px] font-bold tracking-[0.15em] uppercase">Spatial Grid</span>
+            </Link>
+            <Link href="/radius" className="px-5 py-4 flex items-center gap-4 text-white/40 hover:text-white hover:bg-white-[0.03] rounded-xl transition-all border border-transparent hover:border-white/10 group shadow-sm hover:shadow-xl hover:shadow-[var(--gfk-color-brand-default)]/5 bg-gradient-to-r hover:from-white/[0.03] hover:to-transparent">
+              <CircleDashed className="w-4 h-4 group-hover:text-[var(--gfk-color-brand-default)] transition-colors" />
+              <span className="text-[11px] font-bold tracking-[0.15em] uppercase">Radius</span>
+            </Link>
+            <Link href="/motion" className="px-5 py-4 flex items-center gap-4 text-white/40 hover:text-white hover:bg-white-[0.03] rounded-xl transition-all border border-transparent hover:border-white/10 group shadow-sm hover:shadow-xl hover:shadow-[var(--gfk-color-brand-default)]/5 bg-gradient-to-r hover:from-white/[0.03] hover:to-transparent">
+              <Zap className="w-4 h-4 group-hover:text-[var(--gfk-color-brand-default)] transition-colors" />
+              <span className="text-[11px] font-bold tracking-[0.15em] uppercase">Motion</span>
             </Link>
           </nav>
 

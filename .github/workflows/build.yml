@@ -29,3 +29,24 @@ jobs:
         with:
           name: design-tokens
           path: dist/
+
+  verify-docs:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Download built tokens
+        uses: actions/download-artifact@v4
+        with:
+          name: design-tokens
+          path: dist/
+      - name: Copy tokens into docs
+        run: rm -rf docs/src/system-dist && cp -r dist docs/src/system-dist
+      - name: Install docs dependencies
+        run: npm install --prefix docs
+      - name: Build docs site
+        run: npm run build --prefix docs

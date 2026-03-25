@@ -1,5 +1,7 @@
 # Contributing to @grafikui/design-system
 
+> **Note on `dist/`:** The compiled `dist/` folder is intentionally tracked in this repository. It contains the built CSS, JS, and JSON outputs that consumers install directly. This is standard practice for token packages distributed without a separate build step on the consumer side. Running `npm run build` locally will produce a diff only if token values have actually changed — this is expected and correct. Do not add `dist/` to `.gitignore`.
+
 This repository manages token-first design decisions. Do not submit pull requests containing React components or CSS-in-JS abstractions here. The output is JSON and plain CSS.
 
 ## Adding a new token
