@@ -2,7 +2,7 @@
 
 import tokens from "../../system-dist/json/tokens.json";
 import { motion, useAnimation, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 // Map token key to its actual cubic-bezier array for live preview
 const EASING_MAP: Record<string, string | number[]> = {
@@ -18,16 +18,19 @@ function DurationRow({ name, value }: { name: string; value: string }) {
   const ms = parseInt(value, 10) || 0;
   const controls = useAnimation();
   const [active, setActive] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   async function handleHover() {
     if (active) return;
     setActive(true);
-    // Move ball right over exactly 'ms' milliseconds
+    const trackWidth = trackRef.current?.offsetWidth ?? 200;
+    const ballSize = 16;
+    const padding = 12; // left-3 = 12px
+    const target = trackWidth - ballSize - padding * 2;
     await controls.start({
-      x: "calc(100% - 20px)",
-      transition: { duration: ms / 1000, ease: "easeInOut" },
+      x: target,
+      transition: { duration: Math.max(ms / 1000, 0.05), ease: "easeInOut" },
     });
-    // Snap back instantly
     await controls.start({ x: 0, transition: { duration: 0.15, ease: "easeIn" } });
     setActive(false);
   }
@@ -43,8 +46,7 @@ function DurationRow({ name, value }: { name: string; value: string }) {
       <span className="md:w-20 font-mono text-[11px] text-white/70 bg-white/[0.06] border border-white/10 px-3 py-1.5 rounded-lg shrink-0 text-center">
         {value}
       </span>
-      {/* Fixed-width track — ball takes exactly `ms` to traverse it */}
-      <div className="flex-1 relative h-10 bg-white/[0.04] rounded-xl border border-white/5 overflow-hidden">
+      <div ref={trackRef} className="flex-1 relative h-10 bg-white/[0.04] rounded-xl border border-white/5 overflow-hidden">
         <motion.div
           animate={controls}
           initial={{ x: 0 }}
@@ -57,6 +59,7 @@ function DurationRow({ name, value }: { name: string; value: string }) {
     </motion.div>
   );
 }
+
 
 
 function EasingCard({ name, value }: { name: string; value: string }) {
